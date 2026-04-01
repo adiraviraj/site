@@ -541,9 +541,10 @@
       Purely decorative — they don't link anywhere.
     ════════════════════════════════════════════════════════════════
     */
-    const fragments = [
+  const fragments = [
     "Microinteractions",
-    ];
+    "The agents claim that we are now in the 10,205th generation of the code base, in any case, no one could tell if that's right or wrong, as the \"code\" is now a self-modifying binary that has grown beyond human comprehension.",
+  ];
 
     /*
     ════════════════════════════════════════════════════════════════
@@ -600,9 +601,11 @@
       const sv = document.getElementById("stream-view");
       let html = "";
       html += `<div class="gap-lg"></div>`;
-      html += `<span class="fragment">"${fragments[0]}"</span>`;  // move this up
+      html += `<span class="fragment">"${fragments[0]}"</span>`;
       html += `<div class="gap-md"></div>`;
       html += entryHTML(posts[0]);
+      html += `<div class="gap-md"></div>`;
+      html += `<span class="fragment">"${fragments[1]}"</span>`;
       html += `<div class="gap-lg"></div>`;
       sv.innerHTML = html;
     }
