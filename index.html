@@ -600,10 +600,10 @@
       const sv = document.getElementById("stream-view");
       let html = "";
       html += `<div class="gap-lg"></div>`;
+      html += `<span class="fragment">"${fragments[0]}"</span>`;  // move this up
+      html += `<div class="gap-md"></div>`;
       html += entryHTML(posts[0]);
       html += `<div class="gap-lg"></div>`;
-      html += `<span class="fragment">"${fragments[0]}"</span>`;
-      sv.innerHTML = html;
     }
 
     function entryHTML(post) {
