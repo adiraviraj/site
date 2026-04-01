@@ -6,20 +6,11 @@
   <title>Adi — Noodle spill</title>
   <meta name="description" content="A stream of writings and thoughts." />
   <style>
-    /* ─── Reset ─────────────────────────────────────────────── */
     *, *::before, *::after {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
     }
-
-    /* ─── Curve-inspired colour palette ─────────────────────────
-       Pulled directly from Curve Finance's UI:
-         --bg-desktop   : the muted purple-periwinkle desktop
-         --blue-title   : the rich cobalt blue of the Curve logo bar
-         --green-accent : the green used on filter tabs & CTA buttons
-         --orange-accent: the orange used on FACTORY badges
-    ──────────────────────────────────────────────────────────── */
     :root {
       --bg-desktop:    #8686B8;   /* Curve's purple-grey desktop */
       --blue-title:    #1A5FB4;   /* Curve logo cobalt blue      */
@@ -54,7 +45,6 @@
     }
 
     /* ─── Title Bar ───────────────────────────────────────────── */
-    /* Uses Curve's cobalt blue instead of the default Windows navy */
     .title-bar {
       background: var(--blue-title);
       color: #FFFFFF;
@@ -104,7 +94,6 @@
     }
 
     /* ─── Menu Bar ────────────────────────────────────────────── */
-    /* The green tabs mirror Curve's "All / USD / BTC / ETH" filter row */
     .menu-bar {
       background: var(--win-grey);
       display: flex;
@@ -124,13 +113,11 @@
       white-space: nowrap;
     }
 
-    /* Default hover uses the Curve green — mirrors the filter tabs */
     .menu-item:hover {
       background: var(--green-accent);
       color: #FFFFFF;
     }
 
-    /* The "active" current-section item uses the blue title colour */
     .menu-item.active {
       background: var(--blue-title);
       color: #FFFFFF;
@@ -165,7 +152,6 @@
       text-decoration: none;
     }
 
-    /* On hover, the title highlights in Curve blue */
     .entry:hover .entry-title {
       background: var(--blue-title);
       color: #FFFFFF;
@@ -202,8 +188,7 @@
       line-height: 1.55;
     }
 
-    /* ─── Fragments / Quotes ──────────────────────────────────── */
-    /* The left border uses Curve orange — a nod to the FACTORY badge colour */
+    /* ─── Fragments ──────────────────────────────────── */
     .fragment {
       font-size: 12px;
       color: #444444;
@@ -243,7 +228,6 @@
       font-weight: bold;
       line-height: 1.3;
       margin-bottom: 6px;
-      /* Underline uses Curve green instead of plain black */
       border-bottom: 2px solid var(--green-accent);
       padding-bottom: 10px;
       color: #000000;
@@ -267,7 +251,6 @@
       color: #111111;
     }
 
-    /* Section headings — blue left bar, Curve-style */
     .reader-body .section-heading {
       font-size: 13px;
       font-weight: bold;
@@ -285,7 +268,6 @@
       margin: 24px 0;
     }
 
-    /* Image block — full-width, retro sunken border */
     .reader-body .body-image {
       margin: 24px 0;
     }
@@ -307,11 +289,6 @@
       text-align: center;
     }
 
-    /* Video block — responsive 16:9 wrapper.
-       The padding-top trick creates a zero-height box that expands
-       to exactly 16:9. The iframe/video is then absolutely
-       positioned to fill it — this is the correct way to handle
-       responsive embeds without JS. */
     .reader-body .body-video {
       margin: 24px 0;
     }
@@ -341,7 +318,6 @@
       text-align: center;
     }
 
-    /* Blockquote — orange left border, echoing the FACTORY badge */
     .reader-body blockquote {
       border-left: 3px solid var(--orange-accent);
       margin: 20px 0;
@@ -352,7 +328,6 @@
       line-height: 1.7;
     }
 
-    /* Disclaimer box — green border, echoing the Curve "Connect wallet" banner */
     .reader-body .disclaimer {
       border: 1px solid var(--green-accent);
       background: #F0FFF4;
@@ -383,7 +358,6 @@
       white-space: nowrap;
     }
 
-    /* Clock uses orange — mirrors the Curve FACTORY badge colour */
     #status-clock {
       color: var(--orange-accent);
       font-weight: bold;
@@ -411,7 +385,6 @@
       <div class="menu-item active" id="menu-all"  onclick="showStream()">All Posts</div>
       <div class="menu-item"        id="menu-back" onclick="showStream()" style="display:none">&#8592; Back</div>
       <div class="menu-item">Sort By Date</div>
-      <div class="menu-item">Filter</div>
       <div class="menu-item" onclick="showAbout()">About.txt</div>
     </div>
 
@@ -429,46 +402,9 @@
     </div>
 
   </div>
-
+    <!-- ── Posts ─────────────────────────────────────────── -->
   <script>
-    /*
-    ════════════════════════════════════════════════════════════════
-      POSTS ARRAY
-      ───────────
-      Each post is an object. The "body" field is an array of
-      content blocks. Each block is either:
-
-        A plain string  →  rendered as a <p> paragraph.
-
-        Or an object with a "type" field:
-
-        { type: "heading",   text: "Section title" }
-          Renders a bold uppercase section heading with a blue bar.
-
-        { type: "divider" }
-          Renders a dashed horizontal rule.
-
-        { type: "quote",   text: "Pull quote" }
-          Renders an orange-bordered blockquote.
-
-        { type: "disclaimer", text: "Small print" }
-          Renders a green-bordered disclaimer box.
-
-        { type: "image", src: "https://...", caption: "Optional" }
-          Full-width image. Host images in your GitHub repo under
-          an /images folder (src: "./images/photo.jpg") or use any
-          public image URL.
-
-        { type: "video",
-          src: "https://www.youtube.com/embed/VIDEO_ID",
-          caption: "Optional",
-          isEmbed: true }
-          For YouTube, set isEmbed: true and use the /embed/ URL.
-          For self-hosted .mp4, set isEmbed: false and give the
-          direct file path (e.g. src: "./videos/clip.mp4").
-
-    ════════════════════════════════════════════════════════════════
-    */
+   
     const posts = [
       {
         id:      "stages-of-tech-grief",
@@ -533,36 +469,16 @@
       }
     ];
 
-    /*
-    ════════════════════════════════════════════════════════════════
-      FRAGMENTS
-      ─────────
-      Italic quotes scattered between posts in the stream.
-      Purely decorative — they don't link anywhere.
-    ════════════════════════════════════════════════════════════════
-    */
   const fragments = [
     "Microinteractions",
     "The agents claim that we are now in the 10,205th generation of the code base, in any case, no one could tell if that's right or wrong, as the \"code\" is now a self-modifying binary that has grown beyond human comprehension.",
   ];
 
-    /*
-    ════════════════════════════════════════════════════════════════
-      ABOUT TEXT
-      ──────────
-      Shown when "About.txt" is clicked in the menu bar.
-    ════════════════════════════════════════════════════════════════
-    */
     const aboutText = [
       "I'm Adi. I work as a Senior Data Analyst at Moss",
       "I love to write in my spare time."
     ];
 
-    /* ── Body block renderer ───────────────────────────────────────
-       Converts a single body block (string or object) into HTML.
-       This is the only function you need to touch if you want to
-       add a new block type in the future.
-    ──────────────────────────────────────────────────────────────── */
     function renderBlock(block) {
       if (typeof block === "string") {
         return `<p>${block}</p>`;
@@ -622,7 +538,6 @@
         </div>`;
     }
 
-    /* ── Navigation ─────────────────────────────────────────────── */
     function openPost(id) {
       const post = posts.find(p => p.id === id);
       if (!post) return;
@@ -666,7 +581,6 @@
       document.getElementById("menu-all").className        = "menu-item active";
     }
 
-    /* ── Status bar clock ──────────────────────────────────────── */
     function updateClock() {
       const d      = new Date();
       const days   = ["SUN","MON","TUE","WED","THU","FRI","SAT"];
@@ -677,7 +591,6 @@
         `${days[d.getDay()]} ${months[d.getMonth()]} ${String(d.getDate()).padStart(2,"0")} ${hh}:${mm}`;
     }
 
-    /* ── Init ─────────────────────────────────────────────────── */
     document.getElementById("status-count").textContent =
       posts.length + " entr" + (posts.length === 1 ? "y" : "ies");
     buildStream();
