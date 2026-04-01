@@ -21,7 +21,7 @@
          --orange-accent: the orange used on FACTORY badges
     ──────────────────────────────────────────────────────────── */
     :root {
-      --bg-desktop:    #6B6B9B;   /* Curve's purple-grey desktop */
+      --bg-desktop:    #8686B8;   /* Curve's purple-grey desktop */
       --blue-title:    #1A5FB4;   /* Curve logo cobalt blue      */
       --blue-dark:     #0D3D7A;   /* deeper blue for hover/depth */
       --green-accent:  #2E8B3A;   /* Curve's filter-tab green    */
@@ -475,32 +475,34 @@
         size:    "big",
         title:   "Stages of Tech Grief: How New Technologies Emerge",
         date:    "MAR 2023",
-        excerpt: "Why does it always take a decade for obviously better things to win?",
+        excerpt: "Why does it take decades for obviously better things to win?",
         body: [
 
-          { type: "disclaimer", text: "the content below is not an original thought. Rather, an extension of Elting E. Morison’s work in Men, Machines, and Modern Times." },
+          { type: "disclaimer", text: "The content below is not an original thought. Rather, an extension of Elting E. Morison’s work in <em>Men, Machines, and Modern Times.</em>" },
 
-          "Since the beginning of mankind, new technologies have disrupted old ones. Subsistence farming replaced hunting and gathering. Cars replaced horses. Electricity replaced candles. Personal computers replaced mainframes. The pattern is relentless and obvious.",
+          "Since the beginning of mankind, new technologies have disrupted old ones. Subsistence farming replaced hunting and gathering. Cars replaced horse carriages. Electricity replaced lamps. Personal computers replaced mainframes. The pattern is recurring and obvious.",
 
-          "What's less obvious is why it always takes so long.",
+          "What's less obvious is why it always takes so long for disruptions to materialize.",
 
-          "Despite being clearly superior to whatever came before, new technologies are almost never adopted quickly. The gap between introduction and widespread use tends to be measured in decades rather than years. I've thought about this a lot, and recently came across a book that offered the clearest explanation I've found: Men, Machines, and Modern Times by Elting E. Morison. In it, Morison traces this phenomenon through a case study from 19th-century naval warfare that is almost comically instructive.",
+          "Despite being clearly superior to whatever came before, new technologies are almost never adopted quickly. The gap between introduction and widespread use tends to be take decades rather than years. I've thought about this a fair bit, and recently came across a book that offered the clearest explanation I've found: Men, Machines, and Modern Times by Elting E. Morison. In it, Morison traces this phenomenon through a case study from 19th-century naval warfare that is almost comically instructive.",
 
           { type: "heading", text: "Naval warfare in the 19th century" },
 
-          "The guns mounted on US Navy ships in the 1800s were staggeringly inaccurate. Because the guns were fitted directly to the hull, as the ship rolled with the sea, the gunman's ability to aim was at the mercy of the ocean. He could adjust the gun's vertical angle, but had to fire well before the target was properly in sight, whilst hoping the ship's movement and the shot's trajectory would converge at the right moment. More often than not, they didn't.",
+          "The guns mounted on US Navy ships in the 1800s were painfully inaccurate. Because the guns were fitted directly to the hull, as the ship rolled with the sea, the gunman's ability to aim was at the mercy of the ocean. He could adjust the gun's vertical angle, but had to fire well before the target was properly in sight, whilst hoping the ship's movement and the shot's trajectory would converge at the right moment. More often than not, they didn't.",
+
+          { type: "image", src: "./image/uss_indiana.jpg", caption: "USS Indiana in the early 20th century."},
 
           "And the scope made things worse. Mounted directly on the gun barrel, it was practically unusable in combat whereby the recoil from firing would drive it straight into the gunman's eye (ouch).",
 
           { type: "quote", text: "19th-century naval warfare was more painful art than science." },
 
-          "Then a young officer named William S. Sims arrived at the scene and made two changes. First, he redesigned the gun mechanism so it auto-corrected for the ship's movement - if the ship rolled upward as the gunman took aim, the barrel lowered accordingly, and vice versa. Second, he mounted the scope on a sleeve around the barrel rather than on the barrel itself, meaning the gun could recoil freely without moving the sight.",
+          "Then a young officer named William S. Sims arrived at the scene and made two changes. First, he redesigned the gun mechanism so it auto-corrected for the ship's movement. If the ship rolled upward as the gunman took aim, the barrel lowered accordingly, and vice versa. Second, he mounted the scope on a sleeve around the barrel rather than on the barrel itself, meaning the gun could recoil freely without moving the sight.",
 
-          "As a result, accuracy improved by 3,000%. More significantly, the changes made continuous-aim firing possible — the ability to keep a weapon trained on a moving target while firing multiple shots in succession, something previously considered mathematically impossible on a ship at sea.",
+          "As a result accuracy improved by 3,000%. More significantly, the changes made continuous-aim firing possible — the ability to keep a weapon trained on a moving target while firing multiple shots in succession, something previously considered mathematically impossible on a ship at sea.",
 
           "Sims documented everything and submitted his findings to the Bureau of Navigation and the Bureau of Ordnance.",
 
-          "Both institutions ignored him completely.",
+          "And both institutions ignored him completely.",
 
           { type: "heading", text: "The three stages" },
 
@@ -514,21 +516,17 @@
 
           "He eventually went over everyone's heads and appealed directly to President Theodore Roosevelt. In 1908 — a full decade after his innovations were first demonstrated — the new gunnery was implemented across the entire US Navy.",
 
-          { type: "heading", text: "Why the lag always exists" },
+          { type: "heading", text: "Why the lag exists" },
 
-          "The Sims case is a near perfect case study of how new technologies are received, but it doesn't immediately explain why the pattern is so consistent. The answer has less to do with logic than with identity.",
+          "The Sims case is a near perfect example of how new technologies are received, but it doesn't immediately explain why the pattern is so consistent. The answer has less to do with logic than with identity.",
 
           "New technologies don't just replace old tools. They disrupt the power structures, hierarchies, habits, and self-conceptions that have formed around those tools. The US Navy wasn't simply a collection of ships and weapons — it was a society. Officers had built careers, reputations, and daily routines around mastering the existing system. When Sims introduced better guns, he wasn't just offering an upgrade. He was implicitly telling everyone who had dedicated their professional lives to the old system that what they knew was obsolete.",
 
-          { type: "quote", text: "That's not a technical argument. It's an existential one." },
-
           "And humans respond to existential threats the same way regardless of the century: first by looking away, then by constructing reasons why the threat isn't real (aka denial), and finally — when the evidence becomes undeniable — by attacking the messenger.",
 
-          { type: "heading", text: "Where we are now" },
+          "The same pattern has played out with every major technology in history (calculators, bicycles, modern day internet, social networks), and it's playing out right now with AI. Its currently in the name-calling stage, which, if the historical pattern holds, is actually a reliable signal of imminent adoption.",
 
-          "The same pattern has played out with every major technology in history (calculators, bicycles, modern day internet), and it's playing out right now with AI. Its currently in the name-calling stage — which, if the historical pattern holds, is actually a reliable signal of imminent adoption.",
-
-          "The stages are predictable. What's less predictable is how long each one lasts — and whether the people on the right side of history have the patience, and the stubbornness, to wait it out.",
+          "The stages are predictable. What's less predictable is how long each one lasts, and whether the people on the right side of history have the patience, and the stubbornness, to wait it out.",
 
           { type: "divider" }
         ]
@@ -543,11 +541,7 @@
       Purely decorative — they don't link anywhere.
     ════════════════════════════════════════════════════════════════
     */
-    const fragments = [
-      "Stubbornness and conviction look identical until one of them turns out to be right.",
-      "The market is not a mechanism for discovering truth. It's a mechanism for discovering consensus.",
-      "Infrastructure is invisible until it breaks. Then it's everything.",
-    ];
+
 
     /*
     ════════════════════════════════════════════════════════════════
@@ -604,13 +598,7 @@
       const sv = document.getElementById("stream-view");
       let html = "";
       html += `<div class="gap-lg"></div>`;
-      html += `<span class="fragment">"${fragments[0]}"</span>`;
-      html += `<div class="gap-md"></div>`;
       html += entryHTML(posts[0]);
-      html += `<div class="gap-sm"></div>`;
-      html += `<span class="fragment">"${fragments[1]}"</span>`;
-      html += `<div class="gap-md"></div>`;
-      html += `<span class="fragment">"${fragments[2]}"</span>`;
       html += `<div class="gap-lg"></div>`;
       sv.innerHTML = html;
     }
