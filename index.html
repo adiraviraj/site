@@ -363,11 +363,25 @@
       font-weight: bold;
     }
 
+    .window {
+      transform-origin: center bottom;
+      transition: transform 0.38s cubic-bezier(0.4, 0, 0.2, 1),
+                  opacity   0.32s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .window.minimizing {
+      transform: scaleX(0.12) scaleY(0.04) translateY(55vh);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .window.hidden { display: none; }
+
     .screensaver {
       display: none;
       position: fixed;
       inset: 0;
-      background: #000000;
+      background: var(--bg-desktop);
       cursor: none;
       z-index: 999;
     }
@@ -381,6 +395,7 @@
       font-weight: bold;
       white-space: nowrap;
       user-select: none;
+      color: #000000;
     }
 
     .taskbar {
@@ -464,7 +479,7 @@
     <button class="taskbar-btn" onclick="restore()">&#9635; ADI.EXE &mdash; [v1.0]</button>
   </div>
 
-  <!-- ── Posts ─────────────────────────────────────────── -->
+    <!-- ── Posts ─────────────────────────────────────────── -->
   <script>
    
     const posts = [
@@ -659,43 +674,33 @@
     updateClock();
     setInterval(updateClock, 30000);
 
-    const ssColors = ["#1A5FB4","#2E8B3A","#D4620A","#C0C0C0","#FFFFFF","#8686B8","#E8731B","#3DAA4A"];
-    let ssX, ssY, ssVX, ssVY, ssColorIdx = 0, ssRaf = null;
+    let ssX, ssY, ssVX = 2.2, ssVY = 1.8, ssRaf = null;
 
     function minimize() {
-      document.querySelector(".window").style.display = "none";
-      document.getElementById("screensaver").classList.add("active");
-      document.getElementById("taskbar").classList.add("active");
-      const logo = document.getElementById("ss-logo");
-      ssX = Math.random() * (window.innerWidth  - logo.offsetWidth);
-      ssY = Math.random() * (window.innerHeight - logo.offsetHeight);
-      ssVX = 2.2;
-      ssVY = 1.8;
-      logo.style.color = ssColors[ssColorIdx];
-      ssRaf = requestAnimationFrame(tickSS);
+      const win = document.querySelector(".window");
+      win.classList.add("minimizing");
+      setTimeout(() => {
+        win.classList.add("hidden");
+        win.classList.remove("minimizing");
+        document.getElementById("screensaver").classList.add("active");
+        document.getElementById("taskbar").classList.add("active");
+        const logo = document.getElementById("ss-logo");
+        ssX = Math.random() * (window.innerWidth  - logo.offsetWidth);
+        ssY = Math.random() * (window.innerHeight - logo.offsetHeight);
+        ssVX = 2.2; ssVY = 1.8;
+        ssRaf = requestAnimationFrame(tickSS);
+      }, 380);
     }
 
     function tickSS() {
-      const logo   = document.getElementById("ss-logo");
-      const w      = window.innerWidth;
-      const h      = window.innerHeight;
-      const lw     = logo.offsetWidth;
-      const lh     = logo.offsetHeight;
-      let bounced  = false;
-
-      ssX += ssVX;
-      ssY += ssVY;
-
-      if (ssX <= 0)        { ssX = 0;      ssVX =  Math.abs(ssVX); bounced = true; }
-      if (ssX >= w - lw)   { ssX = w - lw; ssVX = -Math.abs(ssVX); bounced = true; }
-      if (ssY <= 0)        { ssY = 0;      ssVY =  Math.abs(ssVY); bounced = true; }
-      if (ssY >= h - lh)   { ssY = h - lh; ssVY = -Math.abs(ssVY); bounced = true; }
-
-      if (bounced) {
-        ssColorIdx = (ssColorIdx + 1) % ssColors.length;
-        logo.style.color = ssColors[ssColorIdx];
-      }
-
+      const logo = document.getElementById("ss-logo");
+      const w = window.innerWidth, h = window.innerHeight;
+      const lw = logo.offsetWidth, lh = logo.offsetHeight;
+      ssX += ssVX; ssY += ssVY;
+      if (ssX <= 0)      { ssX = 0;      ssVX =  Math.abs(ssVX); }
+      if (ssX >= w - lw) { ssX = w - lw; ssVX = -Math.abs(ssVX); }
+      if (ssY <= 0)      { ssY = 0;      ssVY =  Math.abs(ssVY); }
+      if (ssY >= h - lh) { ssY = h - lh; ssVY = -Math.abs(ssVY); }
       logo.style.left = ssX + "px";
       logo.style.top  = ssY + "px";
       ssRaf = requestAnimationFrame(tickSS);
@@ -703,9 +708,18 @@
 
     function restore() {
       cancelAnimationFrame(ssRaf);
-      document.querySelector(".window").style.display = "";
       document.getElementById("screensaver").classList.remove("active");
       document.getElementById("taskbar").classList.remove("active");
+      const win = document.querySelector(".window");
+      win.classList.remove("hidden");
+      win.style.transition = "none";
+      win.style.transform  = "scaleX(0.12) scaleY(0.04) translateY(55vh)";
+      win.style.opacity    = "0";
+      requestAnimationFrame(() => {
+        win.style.transition = "";
+        win.style.transform  = "";
+        win.style.opacity    = "";
+      });
     }
   </script>
 
