@@ -13,10 +13,30 @@
       padding: 0;
     }
 
-    /* ─── Base ───────────────────────────────────────────────── */
+    /* ─── Curve-inspired colour palette ─────────────────────────
+       Pulled directly from Curve Finance's UI:
+         --bg-desktop   : the muted purple-periwinkle desktop
+         --blue-title   : the rich cobalt blue of the Curve logo bar
+         --green-accent : the green used on filter tabs & CTA buttons
+         --orange-accent: the orange used on FACTORY badges
+    ──────────────────────────────────────────────────────────── */
+    :root {
+      --bg-desktop:    #6B6B9B;   /* Curve's purple-grey desktop */
+      --blue-title:    #1A5FB4;   /* Curve logo cobalt blue      */
+      --blue-dark:     #0D3D7A;   /* deeper blue for hover/depth */
+      --green-accent:  #2E8B3A;   /* Curve's filter-tab green    */
+      --green-light:   #3DAA4A;   /* lighter green for hover     */
+      --orange-accent: #D4620A;   /* Curve's FACTORY orange      */
+      --orange-light:  #E8731B;   /* lighter orange for hover    */
+      --win-grey:      #C0C0C0;   /* classic Windows button grey */
+      --win-light:     #FFFFFF;   /* raised border light edge    */
+      --win-dark:      #606060;   /* raised border dark edge     */
+      --win-shadow:    #808080;   /* mid-grey for inset borders  */
+    }
+
     body {
       font-family: 'Courier New', Courier, monospace;
-      background: #585878;          /* classic Win 1.x desktop purple-grey */
+      background: var(--bg-desktop);
       min-height: 100vh;
       display: flex;
       justify-content: center;
@@ -27,16 +47,16 @@
     .window {
       width: 100%;
       max-width: 900px;
-      background: #C0C0C0;
-      /* Classic raised-border effect using adjacent light/dark edges */
+      background: var(--win-grey);
       border: 2px solid;
-      border-color: #FFFFFF #606060 #606060 #FFFFFF;
-      box-shadow: 3px 3px 0 #000000;
+      border-color: var(--win-light) var(--win-dark) var(--win-dark) var(--win-light);
+      box-shadow: 4px 4px 0 #000000;
     }
 
-    /* Title bar — the navy blue strip at the top */
+    /* ─── Title Bar ───────────────────────────────────────────── */
+    /* Uses Curve's cobalt blue instead of the default Windows navy */
     .title-bar {
-      background: #000080;
+      background: var(--blue-title);
       color: #FFFFFF;
       padding: 4px 8px;
       font-size: 13px;
@@ -53,10 +73,9 @@
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
-      max-width: calc(100% - 60px);
+      max-width: calc(100% - 70px);
     }
 
-    /* The three window control buttons (minimize, maximize, close) */
     .win-controls {
       display: flex;
       gap: 2px;
@@ -64,9 +83,9 @@
     }
 
     .win-btn {
-      background: #C0C0C0;
+      background: var(--win-grey);
       border: 2px solid;
-      border-color: #FFFFFF #606060 #606060 #FFFFFF;
+      border-color: var(--win-light) var(--win-dark) var(--win-dark) var(--win-light);
       width: 18px;
       height: 16px;
       font-size: 9px;
@@ -81,17 +100,18 @@
     }
 
     .win-btn:active {
-      /* Invert the border to give a "pressed" feel */
-      border-color: #606060 #FFFFFF #FFFFFF #606060;
+      border-color: var(--win-dark) var(--win-light) var(--win-light) var(--win-dark);
     }
 
     /* ─── Menu Bar ────────────────────────────────────────────── */
+    /* The green tabs mirror Curve's "All / USD / BTC / ETH" filter row */
     .menu-bar {
-      background: #C0C0C0;
+      background: var(--win-grey);
       display: flex;
       align-items: stretch;
-      border-bottom: 1px solid #808080;
+      border-bottom: 1px solid var(--win-shadow);
       padding: 1px 2px 0;
+      gap: 2px;
     }
 
     .menu-item {
@@ -104,57 +124,40 @@
       white-space: nowrap;
     }
 
-    .menu-item:hover,
+    /* Default hover uses the Curve green — mirrors the filter tabs */
+    .menu-item:hover {
+      background: var(--green-accent);
+      color: #FFFFFF;
+    }
+
+    /* The "active" current-section item uses the blue title colour */
     .menu-item.active {
-      background: #000080;
+      background: var(--blue-title);
       color: #FFFFFF;
     }
 
     /* ─── Content Area ────────────────────────────────────────── */
-    /* Sunken inner border — the reverse of the raised window border */
     .content-area {
       background: #FFFFFF;
       border: 2px solid;
-      border-color: #606060 #FFFFFF #FFFFFF #606060;
+      border-color: var(--win-dark) var(--win-light) var(--win-light) var(--win-dark);
       margin: 4px;
       overflow: hidden;
-      position: relative;
     }
 
-    /* ─── Stream View (the main scrolling feed) ───────────────── */
+    /* ─── Stream View ─────────────────────────────────────────── */
     .stream-view {
-      height: 520px;
+      height: 540px;
       overflow-y: scroll;
       padding: 32px 40px;
     }
 
-    /* Retro scrollbar styling */
-    .stream-view::-webkit-scrollbar {
-      width: 17px;
-    }
-    .stream-view::-webkit-scrollbar-track {
-      background: #C0C0C0;
-      border-left: 1px solid #808080;
-    }
-    .stream-view::-webkit-scrollbar-thumb {
-      background: #C0C0C0;
-      border: 2px solid;
-      border-color: #FFFFFF #606060 #606060 #FFFFFF;
-    }
-    .stream-view::-webkit-scrollbar-button {
-      background: #C0C0C0;
-      border: 2px solid;
-      border-color: #FFFFFF #606060 #606060 #FFFFFF;
-      height: 17px;
-      display: block;
-    }
+    .stream-view::-webkit-scrollbar        { width: 17px; }
+    .stream-view::-webkit-scrollbar-track  { background: var(--win-grey); border-left: 1px solid var(--win-shadow); }
+    .stream-view::-webkit-scrollbar-thumb  { background: var(--win-grey); border: 2px solid; border-color: var(--win-light) var(--win-dark) var(--win-dark) var(--win-light); }
+    .stream-view::-webkit-scrollbar-button { background: var(--win-grey); border: 2px solid; border-color: var(--win-light) var(--win-dark) var(--win-dark) var(--win-light); height: 17px; display: block; }
 
-    /* ─── Post Entry Styles ───────────────────────────────────── */
-    /*
-      Posts come in three sizes: big, medium, small.
-      Varying the size creates the rhythmic, non-uniform feel
-      that makes this feel like a thought stream rather than a list.
-    */
+    /* ─── Post Entries ────────────────────────────────────────── */
     .entry {
       cursor: pointer;
       padding: 4px 0;
@@ -162,8 +165,9 @@
       text-decoration: none;
     }
 
+    /* On hover, the title highlights in Curve blue */
     .entry:hover .entry-title {
-      background: #000080;
+      background: var(--blue-title);
       color: #FFFFFF;
     }
 
@@ -198,64 +202,51 @@
       line-height: 1.55;
     }
 
-    /* ─── Fragment / Quote ────────────────────────────────────── */
-    /*
-      Fragments are the scattered italic quotes that bleed between posts.
-      They're not clickable — they're the "ambient noise" of the stream,
-      making it feel like a notebook rather than a blog index.
-    */
+    /* ─── Fragments / Quotes ──────────────────────────────────── */
+    /* The left border uses Curve orange — a nod to the FACTORY badge colour */
     .fragment {
       font-size: 12px;
       color: #444444;
       font-style: italic;
       padding: 6px 0 6px 18px;
-      border-left: 2px solid #C8C8C8;
+      border-left: 3px solid var(--orange-accent);
       display: block;
       font-family: 'Courier New', Courier, monospace;
       line-height: 1.6;
       cursor: default;
     }
 
-    /* Dashed divider lines between sections */
     .divider {
       border: none;
       border-top: 1px dashed #DDDDDD;
       margin: 20px 0;
     }
 
-    /* Spacer blocks — vary height to break grid regularity */
-    .gap-sm  { height: 10px; }
-    .gap-md  { height: 22px; }
-    .gap-lg  { height: 38px; }
+    .gap-sm { height: 10px; }
+    .gap-md { height: 22px; }
+    .gap-lg { height: 38px; }
 
-    /* ─── Reader View (single post) ──────────────────────────── */
+    /* ─── Reader View ─────────────────────────────────────────── */
     .reader-view {
-      height: 520px;
+      height: 540px;
       overflow-y: auto;
-      padding: 32px 40px;
-      display: none;             /* hidden until a post is opened */
+      padding: 36px 44px;
+      display: none;
     }
 
-    .reader-view::-webkit-scrollbar {
-      width: 17px;
-    }
-    .reader-view::-webkit-scrollbar-track {
-      background: #C0C0C0;
-      border-left: 1px solid #808080;
-    }
-    .reader-view::-webkit-scrollbar-thumb {
-      background: #C0C0C0;
-      border: 2px solid;
-      border-color: #FFFFFF #606060 #606060 #FFFFFF;
-    }
+    .reader-view::-webkit-scrollbar        { width: 17px; }
+    .reader-view::-webkit-scrollbar-track  { background: var(--win-grey); border-left: 1px solid var(--win-shadow); }
+    .reader-view::-webkit-scrollbar-thumb  { background: var(--win-grey); border: 2px solid; border-color: var(--win-light) var(--win-dark) var(--win-dark) var(--win-light); }
 
     .reader-title {
-      font-size: 18px;
+      font-size: 19px;
       font-weight: bold;
       line-height: 1.3;
       margin-bottom: 6px;
-      border-bottom: 2px solid #000000;
+      /* Underline uses Curve green instead of plain black */
+      border-bottom: 2px solid var(--green-accent);
       padding-bottom: 10px;
+      color: #000000;
     }
 
     .reader-meta {
@@ -263,21 +254,120 @@
       color: #888888;
       letter-spacing: 1.5px;
       display: block;
-      margin-bottom: 24px;
+      margin-bottom: 28px;
       text-transform: uppercase;
     }
 
+    /* ── Body content renderers ───────────────────────────────── */
+
     .reader-body p {
       font-size: 13px;
-      line-height: 1.85;
-      margin-bottom: 16px;
+      line-height: 1.9;
+      margin-bottom: 18px;
       color: #111111;
+    }
+
+    /* Section headings — blue left bar, Curve-style */
+    .reader-body .section-heading {
+      font-size: 13px;
+      font-weight: bold;
+      color: #000000;
+      margin: 28px 0 10px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      border-left: 3px solid var(--blue-title);
+      padding-left: 8px;
+    }
+
+    .reader-body .body-divider {
+      border: none;
+      border-top: 1px dashed #CCCCCC;
+      margin: 24px 0;
+    }
+
+    /* Image block — full-width, retro sunken border */
+    .reader-body .body-image {
+      margin: 24px 0;
+    }
+
+    .reader-body .body-image img {
+      width: 100%;
+      max-width: 100%;
+      display: block;
+      border: 2px solid;
+      border-color: var(--win-dark) var(--win-light) var(--win-light) var(--win-dark);
+    }
+
+    .reader-body .body-image .img-caption {
+      font-size: 10px;
+      color: #666666;
+      font-style: italic;
+      margin-top: 6px;
+      letter-spacing: 0.5px;
+      text-align: center;
+    }
+
+    /* Video block — responsive 16:9 wrapper.
+       The padding-top trick creates a zero-height box that expands
+       to exactly 16:9. The iframe/video is then absolutely
+       positioned to fill it — this is the correct way to handle
+       responsive embeds without JS. */
+    .reader-body .body-video {
+      margin: 24px 0;
+    }
+
+    .reader-body .video-wrapper {
+      position: relative;
+      width: 100%;
+      padding-top: 56.25%;
+      border: 2px solid;
+      border-color: var(--win-dark) var(--win-light) var(--win-light) var(--win-dark);
+    }
+
+    .reader-body .video-wrapper iframe,
+    .reader-body .video-wrapper video {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      border: none;
+    }
+
+    .reader-body .body-video .vid-caption {
+      font-size: 10px;
+      color: #666666;
+      font-style: italic;
+      margin-top: 6px;
+      letter-spacing: 0.5px;
+      text-align: center;
+    }
+
+    /* Blockquote — orange left border, echoing the FACTORY badge */
+    .reader-body blockquote {
+      border-left: 3px solid var(--orange-accent);
+      margin: 20px 0;
+      padding: 4px 0 4px 16px;
+      font-style: italic;
+      color: #444444;
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    /* Disclaimer box — green border, echoing the Curve "Connect wallet" banner */
+    .reader-body .disclaimer {
+      border: 1px solid var(--green-accent);
+      background: #F0FFF4;
+      padding: 8px 12px;
+      font-size: 11px;
+      color: #2A5E30;
+      font-style: italic;
+      margin-bottom: 28px;
+      line-height: 1.6;
     }
 
     /* ─── Status Bar ──────────────────────────────────────────── */
     .status-bar {
-      background: #C0C0C0;
-      border-top: 1px solid #808080;
+      background: var(--win-grey);
+      border-top: 1px solid var(--win-shadow);
       padding: 2px 6px;
       font-size: 11px;
       font-family: 'Courier New', Courier, monospace;
@@ -286,12 +376,17 @@
       flex-wrap: wrap;
     }
 
-    /* Each status panel has a sunken look */
     .status-panel {
       border: 1px solid;
-      border-color: #606060 #FFFFFF #FFFFFF #606060;
+      border-color: var(--win-dark) var(--win-light) var(--win-light) var(--win-dark);
       padding: 1px 8px;
       white-space: nowrap;
+    }
+
+    /* Clock uses orange — mirrors the Curve FACTORY badge colour */
+    #status-clock {
+      color: var(--orange-accent);
+      font-weight: bold;
     }
   </style>
 </head>
@@ -322,17 +417,8 @@
 
     <!-- ── Content Area ──────────────────────────────────────── -->
     <div class="content-area">
-
-      <!-- Stream View: the scrolling thought-stream index -->
       <div class="stream-view" id="stream-view"></div>
-
-      <!-- Reader View: shown when a post is opened -->
-      <div class="reader-view" id="reader-view">
-        <h2 class="reader-title"  id="reader-title"></h2>
-        <span class="reader-meta" id="reader-meta"></span>
-        <div class="reader-body"  id="reader-body"></div>
-      </div>
-
+      <div class="reader-view" id="reader-view"></div>
     </div>
 
     <!-- ── Status Bar ─────────────────────────────────────────── -->
@@ -346,139 +432,131 @@
 
   <script>
     /*
-    ════════════════════════════════════════════════════════
-      POSTS
-      ─────
-      This is where all your writing lives. To add a new
-      post, copy one of the objects below and paste it at
-      the top of the array (newest first).
+    ════════════════════════════════════════════════════════════════
+      POSTS ARRAY
+      ───────────
+      Each post is an object. The "body" field is an array of
+      content blocks. Each block is either:
 
-      Fields:
-        id      — unique slug, used internally (no spaces)
-        size    — controls title font size in the stream
-                  "big" = 21px, "med" = 15px, "small" = 13px
-                  Vary these to keep the stream feeling alive.
-        title   — the full title of the essay
-        date    — displayed above the title (e.g. "APR 2025")
-        excerpt — one-line teaser shown in the stream (optional)
-        body    — array of paragraphs. Each string = one <p>.
-    ════════════════════════════════════════════════════════
+        A plain string  →  rendered as a <p> paragraph.
+
+        Or an object with a "type" field:
+
+        { type: "heading",   text: "Section title" }
+          Renders a bold uppercase section heading with a blue bar.
+
+        { type: "divider" }
+          Renders a dashed horizontal rule.
+
+        { type: "quote",   text: "Pull quote" }
+          Renders an orange-bordered blockquote.
+
+        { type: "disclaimer", text: "Small print" }
+          Renders a green-bordered disclaimer box.
+
+        { type: "image", src: "https://...", caption: "Optional" }
+          Full-width image. Host images in your GitHub repo under
+          an /images folder (src: "./images/photo.jpg") or use any
+          public image URL.
+
+        { type: "video",
+          src: "https://www.youtube.com/embed/VIDEO_ID",
+          caption: "Optional",
+          isEmbed: true }
+          For YouTube, set isEmbed: true and use the /embed/ URL.
+          For self-hosted .mp4, set isEmbed: false and give the
+          direct file path (e.g. src: "./videos/clip.mp4").
+
+    ════════════════════════════════════════════════════════════════
     */
     const posts = [
       {
-        id: "conviction",
-        size: "big",
-        title: "The thing about conviction is that it's indistinguishable from stubbornness — until it works",
-        date: "APR 2025",
-        excerpt: "Everyone who was early on something looked crazy first. That's the whole point.",
+        id:      "stages-of-tech-grief",
+        size:    "big",
+        title:   "Stages of Tech Grief: How New Technologies Emerge",
+        date:    "MAR 2023",
+        excerpt: "Why does it always take a decade for obviously better things to win?",
         body: [
-          "I've been thinking about the difference between being early and being wrong.",
-          "From the outside, they look identical. Both involve defending a position most people think is mistaken. Both require tolerating significant discomfort. Both feel lonely in similar ways.",
-          "The only way you can tell them apart is time. And by then, the answer is obvious.",
-          "What this means, practically, is that having conviction is not a strategy. It's a precondition. The hard part is figuring out whether your conviction is the right kind — the kind grounded in something real, versus the kind that's just ego with better vocabulary.",
-          "There are a few things I've noticed about the people who seem to get this right. They're usually not arguing. They're watching. They can articulate exactly what would change their mind. And they're comfortable being bored — waiting for the thesis to play out without needing to perform confidence in the meantime.",
-          "That last one is underrated. The people who need to be seen doing something are the most vulnerable to action that looks like conviction but isn't."
-        ]
-      },
-      {
-        id: "defi-casino",
-        size: "med",
-        title: "DeFi is mostly a casino. But so was the internet in 1999.",
-        date: "MAR 2025",
-        excerpt: "The question isn't whether most of it is worthless. It's whether the thing underneath is real.",
-        body: [
-          "Every major technological transition has had a speculative phase that looked, in retrospect, embarrassing.",
-          "Railroads. Electricity. Radio. The dot-com bubble. Each one funded an enormous amount of waste while also building real infrastructure that everyone now takes for granted.",
-          "DeFi is probably in that phase right now. Most of it is leverage on leverage on leverage, dressed up in protocol language. Most of the yield isn't real. Most of the TVL is circular.",
-          "And yet. There is something genuinely interesting underneath — the idea that you can have programmable, permissionless financial infrastructure. That's not nothing.",
-          "The trap is conflating the infrastructure with the speculation layered on top of it. The internet was real even when Pets.com was not. The distinction matters."
-        ]
-      },
-      {
-        id: "first-data-hire",
-        size: "big",
-        title: "On being the first data hire",
-        date: "FEB 2025",
-        excerpt: "The job description is mostly fiction.",
-        body: [
-          "When you're the first data person at a company, the role description is aspirational.",
-          "It will say things like 'build a scalable analytics infrastructure' and 'drive data-informed decision making.' What it actually means: figure out what matters, build the thing that tracks it, and convince people to look at it.",
-          "None of that is in the job description.",
-          "The hardest part isn't the SQL. It's the organizational part. Data only creates value when it changes decisions. Changing decisions requires trust. Trust requires being around long enough, being right more often than not, and being easy to work with when you're wrong.",
-          "It's a slow process. Slower than most data people expect going in.",
-          "The good news: if you figure it out, you become load-bearing. There's a specific kind of indispensability that comes from being the person who built everything and knows where all the bodies are buried."
-        ]
-      },
-      {
-        id: "against-dashboards",
-        size: "big",
-        title: "Against dashboards",
-        date: "JAN 2025",
-        excerpt: "Most dashboards are answers to questions nobody is still asking.",
-        body: [
-          "The dashboard is the analyst's default deliverable. I think it's often the wrong one.",
-          "A dashboard is a permanent answer to a question. But most business questions are not permanent. They're urgent for three weeks, then forgotten.",
-          "Building a dashboard for an urgent question means you spend most of your effort on infrastructure — the charts, the filters, the refresh cadence — and very little on the actual answer. By the time it's done, the urgency has passed.",
-          "The alternative is the short document. Write the analysis. Send it. Move on. This requires resisting the urge to make your work look permanent. It requires accepting that most analysis is ephemeral. But it's almost always faster and more useful.",
-          "The dashboards worth building are for genuinely ongoing questions — metrics that actually change decisions week over week. There are very few of those. Most teams have three good ones, and forty dashboards."
-        ]
-      },
-      {
-        id: "side-project",
-        size: "med",
-        title: "Six months of building a game nobody asked for",
-        date: "NOV 2024",
-        excerpt: "The point was never the product.",
-        body: [
-          "I've been building a mobile territory-capture game in my spare time for about six months.",
-          "Nobody asked for it. There's no business case. It might never be used by anyone except me.",
-          "The useful thing about building something nobody asked for is that there's no pressure. You can make the technically interesting choice instead of the practical one. You can spend a week on hexagonal grid math because you wanted to understand it, then throw out the approach because you found something cleaner.",
-          "I learned more about GPS accuracy, PostGIS indexing, and iOS build pipelines in this project than in months of professional work.",
-          "The other thing: having a side project makes you better at your main job. Owning the full stack changes how you think about the parts you're only responsible for at work."
-        ]
-      },
-      {
-        id: "good-analyst",
-        size: "med",
-        title: "What actually makes a good analyst",
-        date: "SEP 2024",
-        excerpt: "It's not the SQL.",
-        body: [
-          "The best analysts I've worked with share a few characteristics that have nothing to do with technical skills.",
-          "They're curious about the business, not just the data. They want to know why the number is what it is, not just what the number is. They have opinions about the product that are sometimes wrong but always reasoned.",
-          "They know what they don't know. They have calibrated uncertainty. When they say something is true, it usually is. When they're guessing, they say so.",
-          "They can communicate to people who don't want to read a report. The Slack message, the three-sentence summary, the two-slide deck. They adapt to the audience.",
-          "The SQL is table stakes. It matters but it's not the differentiator.",
-          "The differentiator is judgment. And judgment is hard to teach, hard to hire for, and almost impossible to fake for very long."
+
+          { type: "disclaimer", text: "This piece draws on Elting E. Morison's Men, Machines, and Modern Times — the ideas are his, the framing is mine." },
+
+          "Since the beginning of mankind, new technologies have disrupted old ones. Subsistence farming replaced hunting and gathering. Cars replaced horses. Electricity replaced candles. Personal computers replaced mainframes. The pattern is relentless and obvious.",
+
+          "What's less obvious is why it always takes so long.",
+
+          "Despite being demonstrably superior to whatever came before, new technologies are almost never adopted quickly. The gap between introduction and widespread use tends to be measured in decades, not years. I've thought about this a lot, and recently came across a book that offered the clearest explanation I've found: Men, Machines, and Modern Times by Elting E. Morison. In it, Morison traces this phenomenon through a case study from 19th-century naval warfare that is almost comically instructive.",
+
+          { type: "heading", text: "Naval warfare in the 19th century" },
+
+          "The guns mounted on US Navy ships in the 1800s were staggeringly inaccurate. The core problem was simple: the guns were fixed directly to the hull. As the ship rolled with the sea, the gunman's ability to aim was at the mercy of the ocean. He could adjust the gun's vertical angle, but had to fire well before the target was properly in sight — hoping the ship's movement and the shot's trajectory would converge at the right moment. More often than not, they didn't.",
+
+          "The scope made things worse. Mounted directly on the gun barrel, it was practically unusable in combat: the recoil from firing would drive it straight into the gunman's eye.",
+
+          { type: "quote", text: "19th-century naval warfare was more painful art than science." },
+
+          "Then a young officer named William S. Sims arrived. He made two changes. First, he redesigned the gun mechanism so it auto-corrected for the ship's movement — if the ship rolled upward as the gunman took aim, the barrel lowered accordingly, and vice versa. Second, he mounted the scope on a sleeve around the barrel rather than on the barrel itself, meaning the gun could recoil freely without moving the sight.",
+
+          "The results were not subtle. Accuracy improved by 3,000%. More significantly, the changes made continuous-aim firing possible — the ability to keep a weapon trained on a moving target while firing multiple shots in succession, something previously considered mathematically impossible on a ship at sea.",
+
+          "Sims documented everything meticulously. He submitted his findings to the Bureau of Navigation and the Bureau of Ordnance.",
+
+          "Both institutions ignored him completely.",
+
+          { type: "heading", text: "The three stages" },
+
+          "What followed became the template.",
+
+          "Stage one: ignore. Not a single officer responded to Sims' reports. His data sat unread.",
+
+          "Stage two: rational counterarguments. As word spread through the fleet, the Bureau of Navigation was eventually forced to respond. The Chief's reply was measured and seemingly logical: the problem wasn't the guns, it was the officers operating them. More training was the answer. Continuous-aim firing, he added, was impossible — even with five men on a single gun.",
+
+          "Stage three: name-calling. When a handful of US and UK warships began adopting Sims' methods and the results proved undeniable, the rational arguments disappeared. Sims was dismissed as a liar and a \"crackbrained egotist.\"",
+
+          "He eventually went over everyone's heads and appealed directly to President Theodore Roosevelt. In 1908 — a full decade after his innovations were first demonstrated — the new gunnery was implemented across the entire US Navy.",
+
+          { type: "heading", text: "Why the lag always exists" },
+
+          "The Sims case is an almost perfect illustration of how new technologies are received, but it doesn't immediately explain why the pattern is so consistent. The answer has less to do with logic than with identity.",
+
+          "New technologies don't just replace old tools. They disrupt the power structures, hierarchies, habits, and self-conceptions that have formed around those tools. The US Navy wasn't simply a collection of ships and weapons — it was a society. Officers had built careers, reputations, and daily routines around mastering the existing system. When Sims introduced better guns, he wasn't just offering an upgrade. He was implicitly telling everyone who had dedicated their professional lives to the old system that what they knew was obsolete.",
+
+          { type: "quote", text: "That's not a technical argument. It's an existential one." },
+
+          "And humans respond to existential threats the same way regardless of the century: first by looking away, then by constructing reasons why the threat isn't real, and finally — when the evidence becomes undeniable — by attacking the messenger.",
+
+          { type: "heading", text: "Where we are now" },
+
+          "The same pattern has played out with every major technology in history, and it's playing out right now with cryptocurrency and AI. Both are deep in the name-calling stage — which, if the historical pattern holds, is actually a reliable signal of imminent adoption.",
+
+          "The same arc is beginning with nuclear energy, life extension technology, and the broader toolkit of civilisational-scale change. The rational arguments against nuclear, in particular, have the unmistakable texture of Stage Two: technically framed, emotionally driven, and likely to give way to something less polite before long.",
+
+          "The stages are predictable. What's less predictable is how long each one lasts — and whether the people on the right side of history have the patience, and the stubbornness, to wait it out.",
+
+          { type: "divider" }
         ]
       }
     ];
 
     /*
-    ════════════════════════════════════════════════════════
+    ════════════════════════════════════════════════════════════════
       FRAGMENTS
       ─────────
-      These are the italic quotes scattered between posts.
-      They make the stream feel like a notebook, not a blog.
-      Add or edit freely — they don't link to anything.
-    ════════════════════════════════════════════════════════
+      Italic quotes scattered between posts in the stream.
+      Purely decorative — they don't link anywhere.
+    ════════════════════════════════════════════════════════════════
     */
     const fragments = [
       "Stubbornness and conviction look identical until one of them turns out to be right.",
-      "The market is not a mechanism for discovering truth. It's a mechanism for discovering consensus. These are not the same thing.",
+      "The market is not a mechanism for discovering truth. It's a mechanism for discovering consensus.",
       "Infrastructure is invisible until it breaks. Then it's everything.",
-      "The best dashboards I've seen are mostly empty.",
-      "Curiosity doesn't scale. But it compounds.",
-      "A website is just a door. The question is what's on the other side.",
     ];
 
     /*
-    ════════════════════════════════════════════════════════
+    ════════════════════════════════════════════════════════════════
       ABOUT TEXT
       ──────────
       Shown when "About.txt" is clicked in the menu bar.
-      Edit this to be your actual bio.
-    ════════════════════════════════════════════════════════
+    ════════════════════════════════════════════════════════════════
     */
     const aboutText = [
       "Adi. Data analyst. Berlin.",
@@ -486,55 +564,60 @@
       "No newsletter. No comments. Just the writing."
     ];
 
-    /* ── Stream builder ────────────────────────────────────────
-       This function builds the HTML for the thought-stream.
-       The layout is hand-arranged — gap sizes and fragment
-       placement are intentional to keep it feeling non-uniform.
-       If you add many more posts you may want to adjust the
-       spacing and fragment positions below.
-    ────────────────────────────────────────────────────────── */
+    /* ── Body block renderer ───────────────────────────────────────
+       Converts a single body block (string or object) into HTML.
+       This is the only function you need to touch if you want to
+       add a new block type in the future.
+    ──────────────────────────────────────────────────────────────── */
+    function renderBlock(block) {
+      if (typeof block === "string") {
+        return `<p>${block}</p>`;
+      }
+      switch (block.type) {
+        case "heading":
+          return `<div class="section-heading">${block.text}</div>`;
+        case "divider":
+          return `<hr class="body-divider">`;
+        case "quote":
+          return `<blockquote>${block.text}</blockquote>`;
+        case "disclaimer":
+          return `<div class="disclaimer">${block.text}</div>`;
+        case "image":
+          return `
+            <div class="body-image">
+              <img src="${block.src}" alt="${block.caption || ''}" loading="lazy" />
+              ${block.caption ? `<div class="img-caption">${block.caption}</div>` : ''}
+            </div>`;
+        case "video":
+          const el = block.isEmbed
+            ? `<iframe src="${block.src}" allowfullscreen title="${block.caption || 'video'}"></iframe>`
+            : `<video src="${block.src}" controls></video>`;
+          return `
+            <div class="body-video">
+              <div class="video-wrapper">${el}</div>
+              ${block.caption ? `<div class="vid-caption">${block.caption}</div>` : ''}
+            </div>`;
+        default:
+          return "";
+      }
+    }
+
+    /* ── Stream builder ─────────────────────────────────────────── */
     function buildStream() {
       const sv = document.getElementById("stream-view");
       let html = "";
-
       html += `<div class="gap-lg"></div>`;
-      html += `<span class="fragment">"${fragments[5]}"</span>`;
-      html += `<div class="gap-md"></div>`;
-      html += entryHTML(posts[0]);
-
-      html += `<div class="gap-sm"></div>`;
       html += `<span class="fragment">"${fragments[0]}"</span>`;
       html += `<div class="gap-md"></div>`;
-      html += `<hr class="divider">`;
-
-      html += entryHTML(posts[1]);
+      html += entryHTML(posts[0]);
       html += `<div class="gap-sm"></div>`;
       html += `<span class="fragment">"${fragments[1]}"</span>`;
       html += `<div class="gap-md"></div>`;
-
-      html += entryHTML(posts[2]);
-      html += `<hr class="divider">`;
-
-      html += entryHTML(posts[3]);
-      html += `<div class="gap-sm"></div>`;
-      html += `<span class="fragment">"${fragments[3]}"</span>`;
-      html += `<div class="gap-md"></div>`;
-      html += `<hr class="divider">`;
-
-      html += entryHTML(posts[4]);
-      html += `<div class="gap-sm"></div>`;
       html += `<span class="fragment">"${fragments[2]}"</span>`;
-      html += `<div class="gap-sm"></div>`;
-
-      html += entryHTML(posts[5]);
-      html += `<div class="gap-md"></div>`;
-      html += `<span class="fragment">"${fragments[4]}"</span>`;
       html += `<div class="gap-lg"></div>`;
-
       sv.innerHTML = html;
     }
 
-    /* Builds the HTML for a single entry in the stream */
     function entryHTML(post) {
       const excerpt = post.excerpt
         ? `<span class="entry-excerpt">${post.excerpt}</span>`
@@ -547,44 +630,38 @@
         </div>`;
     }
 
-    /* ── Navigation ────────────────────────────────────────────
-       openPost()  — switches to reader view for a specific post
-       showStream() — returns to the main stream
-       showAbout() — shows the about text in the reader view
-    ────────────────────────────────────────────────────────── */
+    /* ── Navigation ─────────────────────────────────────────────── */
     function openPost(id) {
       const post = posts.find(p => p.id === id);
       if (!post) return;
-
-      // Truncate long titles in the title bar
       const shortTitle = post.title.length > 55
         ? post.title.substring(0, 55) + "…"
         : post.title;
-
       document.getElementById("title-bar-text").textContent = shortTitle;
-      document.getElementById("reader-title").textContent  = post.title;
-      document.getElementById("reader-meta").textContent   = post.date + " — " + post.body.length + " paragraphs";
-      document.getElementById("reader-body").innerHTML     = post.body.map(p => `<p>${p}</p>`).join("");
-
+      document.getElementById("reader-view").innerHTML = `
+        <h2 class="reader-title">${post.title}</h2>
+        <span class="reader-meta">${post.date}</span>
+        <div class="reader-body">${post.body.map(renderBlock).join("")}</div>`;
       switchToReader("reading: " + post.date);
     }
 
     function showAbout() {
       document.getElementById("title-bar-text").textContent = "About.txt";
-      document.getElementById("reader-title").textContent   = "About.txt";
-      document.getElementById("reader-meta").textContent    = "";
-      document.getElementById("reader-body").innerHTML      = aboutText.map(p => `<p>${p}</p>`).join("");
-
+      document.getElementById("reader-view").innerHTML = `
+        <h2 class="reader-title">About.txt</h2>
+        <span class="reader-meta"></span>
+        <div class="reader-body">${aboutText.map(p => `<p>${p}</p>`).join("")}</div>`;
       switchToReader("about.txt");
     }
 
     function switchToReader(statusText) {
       document.getElementById("stream-view").style.display = "none";
       document.getElementById("reader-view").style.display = "block";
-      document.getElementById("menu-all").style.display   = "none";
-      document.getElementById("menu-back").style.display  = "";
-      document.getElementById("status-mode").textContent  = statusText;
-      document.getElementById("reader-view").scrollTop    = 0;
+      document.getElementById("menu-all").style.display    = "none";
+      document.getElementById("menu-back").style.display   = "";
+      document.getElementById("status-mode").textContent   = statusText;
+      document.getElementById("reader-view").scrollTop     = 0;
+      document.getElementById("menu-back").className       = "menu-item active";
     }
 
     function showStream() {
@@ -594,24 +671,26 @@
       document.getElementById("menu-all").style.display    = "";
       document.getElementById("menu-back").style.display   = "none";
       document.getElementById("status-mode").textContent   = "scroll to read";
+      document.getElementById("menu-all").className        = "menu-item active";
     }
 
-    /* ── Status bar clock ──────────────────────────────────── */
+    /* ── Status bar clock ──────────────────────────────────────── */
     function updateClock() {
-      const d     = new Date();
-      const days  = ["SUN","MON","TUE","WED","THU","FRI","SAT"];
-      const months= ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"];
-      const hh    = String(d.getHours()).padStart(2, "0");
-      const mm    = String(d.getMinutes()).padStart(2, "0");
-      const clock = `${days[d.getDay()]} ${months[d.getMonth()]} ${String(d.getDate()).padStart(2,"0")} ${hh}:${mm}`;
-      document.getElementById("status-clock").textContent = clock;
+      const d      = new Date();
+      const days   = ["SUN","MON","TUE","WED","THU","FRI","SAT"];
+      const months = ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"];
+      const hh     = String(d.getHours()).padStart(2, "0");
+      const mm     = String(d.getMinutes()).padStart(2, "0");
+      document.getElementById("status-clock").textContent =
+        `${days[d.getDay()]} ${months[d.getMonth()]} ${String(d.getDate()).padStart(2,"0")} ${hh}:${mm}`;
     }
 
-    /* ── Init ──────────────────────────────────────────────── */
-    document.getElementById("status-count").textContent = posts.length + " entries";
+    /* ── Init ─────────────────────────────────────────────────── */
+    document.getElementById("status-count").textContent =
+      posts.length + " entr" + (posts.length === 1 ? "y" : "ies");
     buildStream();
     updateClock();
-    setInterval(updateClock, 30000);   // refresh clock every 30 seconds
+    setInterval(updateClock, 30000);
   </script>
 
 </body>
