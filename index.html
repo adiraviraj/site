@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Adi — Writings & Thoughts</title>
+  <meta name="description" content="A stream of essays and thoughts by Adi." />
+  <style>
+    /* ─── Reset ─────────────────────────────────────────────── */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* ─── Base ───────────────────────────────────────────────── */
+    body {
+      font-family: 'Courier New', Courier, monospace;
+      background: #585878;          /* classic Win 1.x desktop purple-grey */
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 24px 16px 32px;
+    }
+
+    /* ─── Window Shell ────────────────────────────────────────── */
+    .window {
+      width: 100%;
+      max-width: 900px;
+      background: #C0C0C0;
+      /* Classic raised-border effect using adjacent light/dark edges */
+      border: 2px solid;
+      border-color: #FFFFFF #606060 #606060 #FFFFFF;
+      box-shadow: 3px 3px 0 #000000;
+    }
+
+    /* Title bar — the navy blue strip at the top */
+    .title-bar {
+      background: #000080;
+      color: #FFFFFF;
+      padding: 4px 8px;
+      font-size: 13px;
+      font-weight: bold;
+      letter-spacing: 0.5px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      user-select: none;
+      cursor: default;
+    }
+
+    .title-bar-text {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      max-width: calc(100% - 60px);
+    }
+
+    /* The three window control buttons (minimize, maximize, close) */
+    .win-controls {
+      display: flex;
+      gap: 2px;
+      flex-shrink: 0;
+    }
+
+    .win-btn {
+      background: #C0C0C0;
+      border: 2px solid;
+      border-color: #FFFFFF #606060 #606060 #FFFFFF;
+      width: 18px;
+      height: 16px;
+      font-size: 9px;
+      font-family: 'Courier New', Courier, monospace;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #000;
+      line-height: 1;
+    }
+
+    .win-btn:active {
+      /* Invert the border to give a "pressed" feel */
+      border-color: #606060 #FFFFFF #FFFFFF #606060;
+    }
+
+    /* ─── Menu Bar ────────────────────────────────────────────── */
+    .menu-bar {
+      background: #C0C0C0;
+      display: flex;
+      align-items: stretch;
+      border-bottom: 1px solid #808080;
+      padding: 1px 2px 0;
+    }
+
+    .menu-item {
+      padding: 3px 12px;
+      font-size: 12px;
+      font-family: 'Courier New', Courier, monospace;
+      cursor: pointer;
+      color: #000000;
+      user-select: none;
+      white-space: nowrap;
+    }
+
+    .menu-item:hover,
+    .menu-item.active {
+      background: #000080;
+      color: #FFFFFF;
+    }
+
+    /* ─── Content Area ────────────────────────────────────────── */
+    /* Sunken inner border — the reverse of the raised window border */
+    .content-area {
+      background: #FFFFFF;
+      border: 2px solid;
+      border-color: #606060 #FFFFFF #FFFFFF #606060;
+      margin: 4px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* ─── Stream View (the main scrolling feed) ───────────────── */
+    .stream-view {
+      height: 520px;
+      overflow-y: scroll;
+      padding: 32px 40px;
+    }
+
+    /* Retro scrollbar styling */
+    .stream-view::-webkit-scrollbar {
+      width: 17px;
+    }
+    .stream-view::-webkit-scrollbar-track {
+      background: #C0C0C0;
+      border-left: 1px solid #808080;
+    }
+    .stream-view::-webkit-scrollbar-thumb {
+      background: #C0C0C0;
+      border: 2px solid;
+      border-color: #FFFFFF #606060 #606060 #FFFFFF;
+    }
+    .stream-view::-webkit-scrollbar-button {
+      background: #C0C0C0;
+      border: 2px solid;
+      border-color: #FFFFFF #606060 #606060 #FFFFFF;
+      height: 17px;
+      display: block;
+    }
+
+    /* ─── Post Entry Styles ───────────────────────────────────── */
+    /*
+      Posts come in three sizes: big, medium, small.
+      Varying the size creates the rhythmic, non-uniform feel
+      that makes this feel like a thought stream rather than a list.
+    */
+    .entry {
+      cursor: pointer;
+      padding: 4px 0;
+      display: block;
+      text-decoration: none;
+    }
+
+    .entry:hover .entry-title {
+      background: #000080;
+      color: #FFFFFF;
+    }
+
+    .entry-date {
+      font-size: 10px;
+      color: #888888;
+      letter-spacing: 1.5px;
+      display: block;
+      margin-bottom: 3px;
+      text-transform: uppercase;
+    }
+
+    .entry-title {
+      font-family: 'Courier New', Courier, monospace;
+      font-weight: bold;
+      color: #000000;
+      line-height: 1.25;
+      display: inline;
+    }
+
+    .entry.big   .entry-title { font-size: 21px; }
+    .entry.med   .entry-title { font-size: 15px; }
+    .entry.small .entry-title { font-size: 13px; }
+
+    .entry-excerpt {
+      font-size: 11px;
+      color: #555555;
+      font-style: italic;
+      display: block;
+      margin-top: 5px;
+      padding-left: 2px;
+      line-height: 1.55;
+    }
+
+    /* ─── Fragment / Quote ────────────────────────────────────── */
+    /*
+      Fragments are the scattered italic quotes that bleed between posts.
+      They're not clickable — they're the "ambient noise" of the stream,
+      making it feel like a notebook rather than a blog index.
+    */
+    .fragment {
+      font-size: 12px;
+      color: #444444;
+      font-style: italic;
+      padding: 6px 0 6px 18px;
+      border-left: 2px solid #C8C8C8;
+      display: block;
+      font-family: 'Courier New', Courier, monospace;
+      line-height: 1.6;
+      cursor: default;
+    }
+
+    /* Dashed divider lines between sections */
+    .divider {
+      border: none;
+      border-top: 1px dashed #DDDDDD;
+      margin: 20px 0;
+    }
+
+    /* Spacer blocks — vary height to break grid regularity */
+    .gap-sm  { height: 10px; }
+    .gap-md  { height: 22px; }
+    .gap-lg  { height: 38px; }
+
+    /* ─── Reader View (single post) ──────────────────────────── */
+    .reader-view {
+      height: 520px;
+      overflow-y: auto;
+      padding: 32px 40px;
+      display: none;             /* hidden until a post is opened */
+    }
+
+    .reader-view::-webkit-scrollbar {
+      width: 17px;
+    }
+    .reader-view::-webkit-scrollbar-track {
+      background: #C0C0C0;
+      border-left: 1px solid #808080;
+    }
+    .reader-view::-webkit-scrollbar-thumb {
+      background: #C0C0C0;
+      border: 2px solid;
+      border-color: #FFFFFF #606060 #606060 #FFFFFF;
+    }
+
+    .reader-title {
+      font-size: 18px;
+      font-weight: bold;
+      line-height: 1.3;
+      margin-bottom: 6px;
+      border-bottom: 2px solid #000000;
+      padding-bottom: 10px;
+    }
+
+    .reader-meta {
+      font-size: 10px;
+      color: #888888;
+      letter-spacing: 1.5px;
+      display: block;
+      margin-bottom: 24px;
+      text-transform: uppercase;
+    }
+
+    .reader-body p {
+      font-size: 13px;
+      line-height: 1.85;
+      margin-bottom: 16px;
+      color: #111111;
+    }
+
+    /* ─── Status Bar ──────────────────────────────────────────── */
+    .status-bar {
+      background: #C0C0C0;
+      border-top: 1px solid #808080;
+      padding: 2px 6px;
+      font-size: 11px;
+      font-family: 'Courier New', Courier, monospace;
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    /* Each status panel has a sunken look */
+    .status-panel {
+      border: 1px solid;
+      border-color: #606060 #FFFFFF #FFFFFF #606060;
+      padding: 1px 8px;
+      white-space: nowrap;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="window">
+
+    <!-- ── Title Bar ─────────────────────────────────────────── -->
+    <div class="title-bar">
+      <span class="title-bar-text" id="title-bar-text">
+        ADI.EXE &nbsp;—&nbsp; Writings &amp; Thoughts &nbsp;[v1.0]
+      </span>
+      <div class="win-controls">
+        <button class="win-btn" title="Minimize">_</button>
+        <button class="win-btn" title="Maximize">&#9633;</button>
+        <button class="win-btn" title="Close">&#215;</button>
+      </div>
+    </div>
+
+    <!-- ── Menu Bar ──────────────────────────────────────────── -->
+    <div class="menu-bar">
+      <div class="menu-item active" id="menu-all"  onclick="showStream()">All Posts</div>
+      <div class="menu-item"        id="menu-back" onclick="showStream()" style="display:none">&#8592; Back</div>
+      <div class="menu-item">Sort By Date</div>
+      <div class="menu-item">Filter</div>
+      <div class="menu-item" onclick="showAbout()">About.txt</div>
+    </div>
+
+    <!-- ── Content Area ──────────────────────────────────────── -->
+    <div class="content-area">
+
+      <!-- Stream View: the scrolling thought-stream index -->
+      <div class="stream-view" id="stream-view"></div>
+
+      <!-- Reader View: shown when a post is opened -->
+      <div class="reader-view" id="reader-view">
+        <h2 class="reader-title"  id="reader-title"></h2>
+        <span class="reader-meta" id="reader-meta"></span>
+        <div class="reader-body"  id="reader-body"></div>
+      </div>
+
+    </div>
+
+    <!-- ── Status Bar ─────────────────────────────────────────── -->
+    <div class="status-bar">
+      <span class="status-panel" id="status-count">— entries</span>
+      <span class="status-panel" id="status-mode">scroll to read</span>
+      <span class="status-panel" id="status-clock"></span>
+    </div>
+
+  </div>
+
+  <script>
+    /*
+    ════════════════════════════════════════════════════════
+      POSTS
+      ─────
+      This is where all your writing lives. To add a new
+      post, copy one of the objects below and paste it at
+      the top of the array (newest first).
+
+      Fields:
+        id      — unique slug, used internally (no spaces)
+        size    — controls title font size in the stream
+                  "big" = 21px, "med" = 15px, "small" = 13px
+                  Vary these to keep the stream feeling alive.
+        title   — the full title of the essay
+        date    — displayed above the title (e.g. "APR 2025")
+        excerpt — one-line teaser shown in the stream (optional)
+        body    — array of paragraphs. Each string = one <p>.
+    ════════════════════════════════════════════════════════
+    */
+    const posts = [
+      {
+        id: "conviction",
+        size: "big",
+        title: "The thing about conviction is that it's indistinguishable from stubbornness — until it works",
+        date: "APR 2025",
+        excerpt: "Everyone who was early on something looked crazy first. That's the whole point.",
+        body: [
+          "I've been thinking about the difference between being early and being wrong.",
+          "From the outside, they look identical. Both involve defending a position most people think is mistaken. Both require tolerating significant discomfort. Both feel lonely in similar ways.",
+          "The only way you can tell them apart is time. And by then, the answer is obvious.",
+          "What this means, practically, is that having conviction is not a strategy. It's a precondition. The hard part is figuring out whether your conviction is the right kind — the kind grounded in something real, versus the kind that's just ego with better vocabulary.",
+          "There are a few things I've noticed about the people who seem to get this right. They're usually not arguing. They're watching. They can articulate exactly what would change their mind. And they're comfortable being bored — waiting for the thesis to play out without needing to perform confidence in the meantime.",
+          "That last one is underrated. The people who need to be seen doing something are the most vulnerable to action that looks like conviction but isn't."
+        ]
+      },
+      {
+        id: "defi-casino",
+        size: "med",
+        title: "DeFi is mostly a casino. But so was the internet in 1999.",
+        date: "MAR 2025",
+        excerpt: "The question isn't whether most of it is worthless. It's whether the thing underneath is real.",
+        body: [
+          "Every major technological transition has had a speculative phase that looked, in retrospect, embarrassing.",
+          "Railroads. Electricity. Radio. The dot-com bubble. Each one funded an enormous amount of waste while also building real infrastructure that everyone now takes for granted.",
+          "DeFi is probably in that phase right now. Most of it is leverage on leverage on leverage, dressed up in protocol language. Most of the yield isn't real. Most of the TVL is circular.",
+          "And yet. There is something genuinely interesting underneath — the idea that you can have programmable, permissionless financial infrastructure. That's not nothing.",
+          "The trap is conflating the infrastructure with the speculation layered on top of it. The internet was real even when Pets.com was not. The distinction matters."
+        ]
+      },
+      {
+        id: "first-data-hire",
+        size: "big",
+        title: "On being the first data hire",
+        date: "FEB 2025",
+        excerpt: "The job description is mostly fiction.",
+        body: [
+          "When you're the first data person at a company, the role description is aspirational.",
+          "It will say things like 'build a scalable analytics infrastructure' and 'drive data-informed decision making.' What it actually means: figure out what matters, build the thing that tracks it, and convince people to look at it.",
+          "None of that is in the job description.",
+          "The hardest part isn't the SQL. It's the organizational part. Data only creates value when it changes decisions. Changing decisions requires trust. Trust requires being around long enough, being right more often than not, and being easy to work with when you're wrong.",
+          "It's a slow process. Slower than most data people expect going in.",
+          "The good news: if you figure it out, you become load-bearing. There's a specific kind of indispensability that comes from being the person who built everything and knows where all the bodies are buried."
+        ]
+      },
+      {
+        id: "against-dashboards",
+        size: "big",
+        title: "Against dashboards",
+        date: "JAN 2025",
+        excerpt: "Most dashboards are answers to questions nobody is still asking.",
+        body: [
+          "The dashboard is the analyst's default deliverable. I think it's often the wrong one.",
+          "A dashboard is a permanent answer to a question. But most business questions are not permanent. They're urgent for three weeks, then forgotten.",
+          "Building a dashboard for an urgent question means you spend most of your effort on infrastructure — the charts, the filters, the refresh cadence — and very little on the actual answer. By the time it's done, the urgency has passed.",
+          "The alternative is the short document. Write the analysis. Send it. Move on. This requires resisting the urge to make your work look permanent. It requires accepting that most analysis is ephemeral. But it's almost always faster and more useful.",
+          "The dashboards worth building are for genuinely ongoing questions — metrics that actually change decisions week over week. There are very few of those. Most teams have three good ones, and forty dashboards."
+        ]
+      },
+      {
+        id: "side-project",
+        size: "med",
+        title: "Six months of building a game nobody asked for",
+        date: "NOV 2024",
+        excerpt: "The point was never the product.",
+        body: [
+          "I've been building a mobile territory-capture game in my spare time for about six months.",
+          "Nobody asked for it. There's no business case. It might never be used by anyone except me.",
+          "The useful thing about building something nobody asked for is that there's no pressure. You can make the technically interesting choice instead of the practical one. You can spend a week on hexagonal grid math because you wanted to understand it, then throw out the approach because you found something cleaner.",
+          "I learned more about GPS accuracy, PostGIS indexing, and iOS build pipelines in this project than in months of professional work.",
+          "The other thing: having a side project makes you better at your main job. Owning the full stack changes how you think about the parts you're only responsible for at work."
+        ]
+      },
+      {
+        id: "good-analyst",
+        size: "med",
+        title: "What actually makes a good analyst",
+        date: "SEP 2024",
+        excerpt: "It's not the SQL.",
+        body: [
+          "The best analysts I've worked with share a few characteristics that have nothing to do with technical skills.",
+          "They're curious about the business, not just the data. They want to know why the number is what it is, not just what the number is. They have opinions about the product that are sometimes wrong but always reasoned.",
+          "They know what they don't know. They have calibrated uncertainty. When they say something is true, it usually is. When they're guessing, they say so.",
+          "They can communicate to people who don't want to read a report. The Slack message, the three-sentence summary, the two-slide deck. They adapt to the audience.",
+          "The SQL is table stakes. It matters but it's not the differentiator.",
+          "The differentiator is judgment. And judgment is hard to teach, hard to hire for, and almost impossible to fake for very long."
+        ]
+      }
+    ];
+
+    /*
+    ════════════════════════════════════════════════════════
+      FRAGMENTS
+      ─────────
+      These are the italic quotes scattered between posts.
+      They make the stream feel like a notebook, not a blog.
+      Add or edit freely — they don't link to anything.
+    ════════════════════════════════════════════════════════
+    */
+    const fragments = [
+      "Stubbornness and conviction look identical until one of them turns out to be right.",
+      "The market is not a mechanism for discovering truth. It's a mechanism for discovering consensus. These are not the same thing.",
+      "Infrastructure is invisible until it breaks. Then it's everything.",
+      "The best dashboards I've seen are mostly empty.",
+      "Curiosity doesn't scale. But it compounds.",
+      "A website is just a door. The question is what's on the other side.",
+    ];
+
+    /*
+    ════════════════════════════════════════════════════════
+      ABOUT TEXT
+      ──────────
+      Shown when "About.txt" is clicked in the menu bar.
+      Edit this to be your actual bio.
+    ════════════════════════════════════════════════════════
+    */
+    const aboutText = [
+      "Adi. Data analyst. Berlin.",
+      "I write about things I can't stop thinking about — data, markets, building things, how systems actually work versus how people say they work.",
+      "No newsletter. No comments. Just the writing."
+    ];
+
+    /* ── Stream builder ────────────────────────────────────────
+       This function builds the HTML for the thought-stream.
+       The layout is hand-arranged — gap sizes and fragment
+       placement are intentional to keep it feeling non-uniform.
+       If you add many more posts you may want to adjust the
+       spacing and fragment positions below.
+    ────────────────────────────────────────────────────────── */
+    function buildStream() {
+      const sv = document.getElementById("stream-view");
+      let html = "";
+
+      html += `<div class="gap-lg"></div>`;
+      html += `<span class="fragment">"${fragments[5]}"</span>`;
+      html += `<div class="gap-md"></div>`;
+      html += entryHTML(posts[0]);
+
+      html += `<div class="gap-sm"></div>`;
+      html += `<span class="fragment">"${fragments[0]}"</span>`;
+      html += `<div class="gap-md"></div>`;
+      html += `<hr class="divider">`;
+
+      html += entryHTML(posts[1]);
+      html += `<div class="gap-sm"></div>`;
+      html += `<span class="fragment">"${fragments[1]}"</span>`;
+      html += `<div class="gap-md"></div>`;
+
+      html += entryHTML(posts[2]);
+      html += `<hr class="divider">`;
+
+      html += entryHTML(posts[3]);
+      html += `<div class="gap-sm"></div>`;
+      html += `<span class="fragment">"${fragments[3]}"</span>`;
+      html += `<div class="gap-md"></div>`;
+      html += `<hr class="divider">`;
+
+      html += entryHTML(posts[4]);
+      html += `<div class="gap-sm"></div>`;
+      html += `<span class="fragment">"${fragments[2]}"</span>`;
+      html += `<div class="gap-sm"></div>`;
+
+      html += entryHTML(posts[5]);
+      html += `<div class="gap-md"></div>`;
+      html += `<span class="fragment">"${fragments[4]}"</span>`;
+      html += `<div class="gap-lg"></div>`;
+
+      sv.innerHTML = html;
+    }
+
+    /* Builds the HTML for a single entry in the stream */
+    function entryHTML(post) {
+      const excerpt = post.excerpt
+        ? `<span class="entry-excerpt">${post.excerpt}</span>`
+        : "";
+      return `
+        <div class="entry ${post.size}" onclick="openPost('${post.id}')">
+          <span class="entry-date">${post.date}</span>
+          <span class="entry-title">${post.title}</span>
+          ${excerpt}
+        </div>`;
+    }
+
+    /* ── Navigation ────────────────────────────────────────────
+       openPost()  — switches to reader view for a specific post
+       showStream() — returns to the main stream
+       showAbout() — shows the about text in the reader view
+    ────────────────────────────────────────────────────────── */
+    function openPost(id) {
+      const post = posts.find(p => p.id === id);
+      if (!post) return;
+
+      // Truncate long titles in the title bar
+      const shortTitle = post.title.length > 55
+        ? post.title.substring(0, 55) + "…"
+        : post.title;
+
+      document.getElementById("title-bar-text").textContent = shortTitle;
+      document.getElementById("reader-title").textContent  = post.title;
+      document.getElementById("reader-meta").textContent   = post.date + " — " + post.body.length + " paragraphs";
+      document.getElementById("reader-body").innerHTML     = post.body.map(p => `<p>${p}</p>`).join("");
+
+      switchToReader("reading: " + post.date);
+    }
+
+    function showAbout() {
+      document.getElementById("title-bar-text").textContent = "About.txt";
+      document.getElementById("reader-title").textContent   = "About.txt";
+      document.getElementById("reader-meta").textContent    = "";
+      document.getElementById("reader-body").innerHTML      = aboutText.map(p => `<p>${p}</p>`).join("");
+
+      switchToReader("about.txt");
+    }
+
+    function switchToReader(statusText) {
+      document.getElementById("stream-view").style.display = "none";
+      document.getElementById("reader-view").style.display = "block";
+      document.getElementById("menu-all").style.display   = "none";
+      document.getElementById("menu-back").style.display  = "";
+      document.getElementById("status-mode").textContent  = statusText;
+      document.getElementById("reader-view").scrollTop    = 0;
+    }
+
+    function showStream() {
+      document.getElementById("title-bar-text").innerHTML  = "ADI.EXE &nbsp;—&nbsp; Writings &amp; Thoughts &nbsp;[v1.0]";
+      document.getElementById("stream-view").style.display = "";
+      document.getElementById("reader-view").style.display = "none";
+      document.getElementById("menu-all").style.display    = "";
+      document.getElementById("menu-back").style.display   = "none";
+      document.getElementById("status-mode").textContent   = "scroll to read";
+    }
+
+    /* ── Status bar clock ──────────────────────────────────── */
+    function updateClock() {
+      const d     = new Date();
+      const days  = ["SUN","MON","TUE","WED","THU","FRI","SAT"];
+      const months= ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"];
+      const hh    = String(d.getHours()).padStart(2, "0");
+      const mm    = String(d.getMinutes()).padStart(2, "0");
+      const clock = `${days[d.getDay()]} ${months[d.getMonth()]} ${String(d.getDate()).padStart(2,"0")} ${hh}:${mm}`;
+      document.getElementById("status-clock").textContent = clock;
+    }
+
+    /* ── Init ──────────────────────────────────────────────── */
+    document.getElementById("status-count").textContent = posts.length + " entries";
+    buildStream();
+    updateClock();
+    setInterval(updateClock, 30000);   // refresh clock every 30 seconds
+  </script>
+
+</body>
+</html>
