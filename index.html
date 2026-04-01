@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Adi — Noodle spill</title>
+  <title>Adi - Noodle spill</title>
   <meta name="description" content="A stream of writings and thoughts." />
   <style>
     *, *::before, *::after {
@@ -362,6 +362,59 @@
       color: var(--orange-accent);
       font-weight: bold;
     }
+
+    .screensaver {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: #000000;
+      cursor: none;
+      z-index: 999;
+    }
+
+    .screensaver.active { display: block; }
+
+    .ss-logo {
+      position: absolute;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 22px;
+      font-weight: bold;
+      white-space: nowrap;
+      user-select: none;
+    }
+
+    .taskbar {
+      display: none;
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      height: 28px;
+      background: var(--win-grey);
+      border-top: 2px solid var(--win-light);
+      z-index: 1000;
+      align-items: center;
+      padding: 0 6px;
+      gap: 4px;
+    }
+
+    .taskbar.active { display: flex; }
+
+    .taskbar-btn {
+      background: var(--win-grey);
+      border: 2px solid;
+      border-color: var(--win-light) var(--win-dark) var(--win-dark) var(--win-light);
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 11px;
+      font-weight: bold;
+      padding: 1px 10px;
+      cursor: pointer;
+      height: 20px;
+      display: flex;
+      align-items: center;
+    }
+
+    .taskbar-btn:active {
+      border-color: var(--win-dark) var(--win-light) var(--win-light) var(--win-dark);
+    }
   </style>
 </head>
 <body>
@@ -374,7 +427,7 @@
         ADI.EXE &nbsp;—&nbsp; [v1.0]
       </span>
       <div class="win-controls">
-        <button class="win-btn" title="Minimize">_</button>
+        <button class="win-btn" title="Minimize" onclick="minimize()">_</button>
         <button class="win-btn" title="Maximize">&#9633;</button>
         <button class="win-btn" title="Close">&#215;</button>
       </div>
@@ -402,7 +455,16 @@
     </div>
 
   </div>
-    <!-- ── Posts ─────────────────────────────────────────── -->
+
+  <div class="screensaver" id="screensaver" onclick="restore()">
+    <span class="ss-logo" id="ss-logo">ADI.EXE</span>
+  </div>
+
+  <div class="taskbar" id="taskbar">
+    <button class="taskbar-btn" onclick="restore()">&#9635; ADI.EXE &mdash; [v1.0]</button>
+  </div>
+
+  <!-- ── Posts ─────────────────────────────────────────── -->
   <script>
    
     const posts = [
@@ -596,6 +658,55 @@
     buildStream();
     updateClock();
     setInterval(updateClock, 30000);
+
+    const ssColors = ["#1A5FB4","#2E8B3A","#D4620A","#C0C0C0","#FFFFFF","#8686B8","#E8731B","#3DAA4A"];
+    let ssX, ssY, ssVX, ssVY, ssColorIdx = 0, ssRaf = null;
+
+    function minimize() {
+      document.querySelector(".window").style.display = "none";
+      document.getElementById("screensaver").classList.add("active");
+      document.getElementById("taskbar").classList.add("active");
+      const logo = document.getElementById("ss-logo");
+      ssX = Math.random() * (window.innerWidth  - logo.offsetWidth);
+      ssY = Math.random() * (window.innerHeight - logo.offsetHeight);
+      ssVX = 2.2;
+      ssVY = 1.8;
+      logo.style.color = ssColors[ssColorIdx];
+      ssRaf = requestAnimationFrame(tickSS);
+    }
+
+    function tickSS() {
+      const logo   = document.getElementById("ss-logo");
+      const w      = window.innerWidth;
+      const h      = window.innerHeight;
+      const lw     = logo.offsetWidth;
+      const lh     = logo.offsetHeight;
+      let bounced  = false;
+
+      ssX += ssVX;
+      ssY += ssVY;
+
+      if (ssX <= 0)        { ssX = 0;      ssVX =  Math.abs(ssVX); bounced = true; }
+      if (ssX >= w - lw)   { ssX = w - lw; ssVX = -Math.abs(ssVX); bounced = true; }
+      if (ssY <= 0)        { ssY = 0;      ssVY =  Math.abs(ssVY); bounced = true; }
+      if (ssY >= h - lh)   { ssY = h - lh; ssVY = -Math.abs(ssVY); bounced = true; }
+
+      if (bounced) {
+        ssColorIdx = (ssColorIdx + 1) % ssColors.length;
+        logo.style.color = ssColors[ssColorIdx];
+      }
+
+      logo.style.left = ssX + "px";
+      logo.style.top  = ssY + "px";
+      ssRaf = requestAnimationFrame(tickSS);
+    }
+
+    function restore() {
+      cancelAnimationFrame(ssRaf);
+      document.querySelector(".window").style.display = "";
+      document.getElementById("screensaver").classList.remove("active");
+      document.getElementById("taskbar").classList.remove("active");
+    }
   </script>
 
 </body>
