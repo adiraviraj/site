@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Adi — Writings & Thoughts</title>
+  <title>Adi — Noodle spill</title>
   <meta name="description" content="A stream of essays and thoughts by Adi." />
   <style>
     /* ─── Reset ─────────────────────────────────────────────── */
@@ -541,7 +541,9 @@
       Purely decorative — they don't link anywhere.
     ════════════════════════════════════════════════════════════════
     */
-
+    const fragments = [
+    "Microinteractions",
+    ];
 
     /*
     ════════════════════════════════════════════════════════════════
@@ -600,6 +602,7 @@
       html += `<div class="gap-lg"></div>`;
       html += entryHTML(posts[0]);
       html += `<div class="gap-lg"></div>`;
+      html += `<span class="fragment">"${fragments[0]}"</span>`;
       sv.innerHTML = html;
     }
 
