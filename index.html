@@ -32,7 +32,10 @@
       display: flex;
       justify-content: center;
       padding: 24px 16px 32px;
+      transition: padding 0.2s ease;
     }
+
+    body.maximized { padding: 0; }
 
     /* ─── Window Shell ────────────────────────────────────────── */
     .window {
@@ -137,7 +140,10 @@
       height: 540px;
       overflow-y: scroll;
       padding: 32px 40px;
+      transition: height 0.2s ease;
     }
+
+    .stream-view.maximized { height: calc(100vh - 90px); }
 
     .stream-view::-webkit-scrollbar        { width: 17px; }
     .stream-view::-webkit-scrollbar-track  { background: var(--win-grey); border-left: 1px solid var(--win-shadow); }
@@ -217,7 +223,10 @@
       overflow-y: auto;
       padding: 36px 44px;
       display: none;
+      transition: height 0.2s ease;
     }
+
+    .reader-view.maximized { height: calc(100vh - 90px); }
 
     .reader-view::-webkit-scrollbar        { width: 17px; }
     .reader-view::-webkit-scrollbar-track  { background: var(--win-grey); border-left: 1px solid var(--win-shadow); }
@@ -366,7 +375,18 @@
     .window {
       transform-origin: center bottom;
       transition: transform 0.38s cubic-bezier(0.4, 0, 0.2, 1),
-                  opacity   0.32s cubic-bezier(0.4, 0, 0.2, 1);
+                  opacity   0.32s cubic-bezier(0.4, 0, 0.2, 1),
+                  max-width 0.2s ease,
+                  width     0.2s ease;
+    }
+
+    .window.maximized {
+      max-width: 100%;
+      width: 100%;
+      position: fixed;
+      inset: 0;
+      z-index: 998;
+      box-shadow: none;
     }
 
     .window.minimizing {
@@ -478,14 +498,14 @@
   <div class="window">
 
     <!-- ── Title Bar ─────────────────────────────────────────── -->
-    <div class="title-bar">
+    <div class="title-bar" ondblclick="toggleMaximize()">
       <span class="title-bar-text" id="title-bar-text">
         ADI.EXE &nbsp;—&nbsp; [v1.0]
       </span>
       <div class="win-controls">
-        <button class="win-btn" title="Minimize" onclick="minimize()">_</button>
-        <button class="win-btn" title="Maximize">&#9633;</button>
-        <button class="win-btn" title="Close" onclick="shutdown()">&#215;</button>
+        <button class="win-btn" title="Minimize" onclick="minimize()" ondblclick="event.stopPropagation()">_</button>
+        <button class="win-btn" id="btn-maximize" title="Maximize" onclick="toggleMaximize()" ondblclick="event.stopPropagation()">&#9633;</button>
+        <button class="win-btn" title="Close" onclick="shutdown()" ondblclick="event.stopPropagation()">&#215;</button>
       </div>
     </div>
 
@@ -532,7 +552,7 @@
       {
         id:      "theatre-of-internet-identity",
         size:    "big",
-        title:   "The Theatre of Internet Identity",
+        title:   "Theatre of Internet Identity",
         date:    "APR 2024",
         excerpt: "On performance, privacy, and the act of living unobserved.",
         body: [
@@ -545,13 +565,13 @@
 
           "One friend argued that this was a fairly narrow perspective. For him, social media offers an opportunity for individuals to engage in their art and benefit socially, spiritually, and financially.",
 
-          "I agree with him that for many individuals, this might be the case. Social media is not without its fair share of benefits — amplifying one's artistic capabilities to five billion people on the internet being one of those benefits.",
+          "I agree that for many this might be the case. Social media is not without its fair share of benefits — amplifying one's artistic capabilities to five billion people on the internet being one of those benefits.",
 
           "But for most folks, social media has become a platform for digital performance. A never-ending theatrical production where we're simultaneously the actor, director, and most desperate audience member.",
 
           "Take Instagram as an example. Using my friend group as a sample size alone, I know people who can barely go a day without posting a story about their day-to-day life — concert reels, Sunday pancakes, daily coffee runs (like, who even gives a shit?).",
 
-          "They feel a deep-seated desire for their life events to be shared and validated. It's as if a certain thing never occurred if it wasn't witnessed by others. A digital-age riff on the <em>if a tree falls in a forest</em> thought experiment.",
+          "They feel a deep-seated desire for their life events to be shared and validated. It's as if a certain thing never occurred if it wasn't witnessed by others. A digital-age riff on the <a href=\"https://en.wikipedia.org/wiki/If_a_tree_falls_in_a_forest_and_no_one_is_around_to_hear_it,_does_it_make_a_sound%3F\" target=\"_blank\" rel=\"noopener\"><em>if a tree falls in a forest</em></a> thought experiment.",
 
           { type: "quote", text: "Privacy has sadly become a useless commodity. Perhaps even undesirable." },
 
@@ -757,6 +777,29 @@
     buildStream();
     updateClock();
     setInterval(updateClock, 30000);
+
+    let isMaximized = false;
+
+    function toggleMaximize() {
+      isMaximized = !isMaximized;
+      const win    = document.querySelector(".window");
+      const stream = document.getElementById("stream-view");
+      const reader = document.getElementById("reader-view");
+      const btn    = document.getElementById("btn-maximize");
+      if (isMaximized) {
+        document.body.classList.add("maximized");
+        win.classList.add("maximized");
+        stream.classList.add("maximized");
+        reader.classList.add("maximized");
+        btn.innerHTML = "&#10696;";
+      } else {
+        document.body.classList.remove("maximized");
+        win.classList.remove("maximized");
+        stream.classList.remove("maximized");
+        reader.classList.remove("maximized");
+        btn.innerHTML = "&#9633;";
+      }
+    }
 
     let ssX, ssY, ssVX = 2.2, ssVY = 1.8, ssRaf = null;
 
