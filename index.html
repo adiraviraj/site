@@ -484,6 +484,41 @@
    
     const posts = [
       {
+        id:      "theatre-of-internet-identity",
+        size:    "big",
+        title:   "The Theatre of Internet Identity",
+        date:    "APR 2026",
+        excerpt: "On performance, privacy, and the radical act of living unobserved.",
+        body: [
+
+          "A few weeks ago, while having dinner with a couple of good friends, we happened to discuss the notion of internet fakeness.",
+
+          "My argument was that never in the history of humanity has there been so many platforms for performance on the internet.",
+
+          "Instagram, where one pretends to lead the most enviable life, Twitter, performing the role of an intellectual, and LinkedIn, pretending and performing about how successful one's career is. And don't get me started on TikTok.",
+
+          "One friend argued that this was a fairly narrow perspective. For him, social media offers an opportunity for individuals to engage in their art and benefit socially, spiritually, and financially.",
+
+          "I agree with him that for many individuals, this might be the case. Social media is not without its fair share of benefits — amplifying one's artistic capabilities to five billion people on the internet being one of those benefits.",
+
+          "But for most folks, social media has become a platform for digital performance. A never-ending theatrical production where we're simultaneously the actor, director, and most desperate audience member.",
+
+          "Take Instagram as an example. Using my friend group as a sample size alone, I know people who can barely go a day without posting a story about their day-to-day life — concert reels, Sunday pancakes, daily coffee runs (like, who even gives a shit?).",
+
+          "They feel a deep-seated desire for their life events to be shared and validated. It's as if a certain thing never occurred if it wasn't witnessed by others. A digital-age riff on the <em>if a tree falls in a forest</em> thought experiment.",
+
+          { type: "quote", text: "Privacy has sadly become a useless commodity. Perhaps even undesirable." },
+
+          "On the other hand, it's difficult to blame people for being addicted to their screens. Applications like Instagram and TikTok are built by one of the best designers and engineers in the world, carefully curated to alter your brain chemistry with viral loops and feasts of dopamine.",
+
+          "In a world where internet performance and identity theatrics abound, preserving one's privacy and living an unobserved life has become radically countercultural. The more the world reveals its public life on the internet, the more some of us virtually retract.",
+
+          "From observing a certain few around me, I can say with utmost conviction that there is a kind of deep happiness that chooses privacy over performance. It blooms invisible to the public eye and does not demand the validation of being Known About.",
+
+          { type: "divider" }
+        ]
+      },
+      {
         id:      "stages-of-tech-grief",
         size:    "big",
         title:   "Stages of Tech Grief: How New Technologies Emerge",
@@ -597,6 +632,8 @@
       html += `<span class="fragment">${fragments[0]}</span>`;
       html += `<div class="gap-md"></div>`;
       html += entryHTML(posts[0]);
+      html += `<div class="gap-md"></div>`;
+      html += entryHTML(posts[1]);
       html += `<div class="gap-md"></div>`;
       html += `<span class="fragment">"${fragments[1]}"</span>`;
       html += `<div class="gap-lg"></div>`;
