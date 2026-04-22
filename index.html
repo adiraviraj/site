@@ -430,6 +430,47 @@
     .taskbar-btn:active {
       border-color: var(--win-dark) var(--win-light) var(--win-light) var(--win-dark);
     }
+
+    .shutdown-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: #000000;
+      z-index: 2000;
+      color: #FFFFFF;
+      font-family: 'Courier New', Courier, monospace;
+      opacity: 1;
+      transition: opacity 0.4s ease;
+    }
+
+    .shutdown-overlay.active { display: block; }
+    .shutdown-overlay.fading-out { opacity: 0; }
+
+    .shutdown-message {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 18px;
+      white-space: nowrap;
+      opacity: 0;
+      transition: opacity 0.8s ease;
+    }
+
+    .shutdown-message.visible { opacity: 1; }
+
+    .shutdown-boot {
+      position: absolute;
+      top: 32px;
+      left: 32px;
+      right: 32px;
+      font-size: 14px;
+      line-height: 1.6;
+      white-space: pre;
+      display: none;
+    }
+
+    .shutdown-boot.visible { display: block; }
   </style>
 </head>
 <body>
@@ -444,7 +485,7 @@
       <div class="win-controls">
         <button class="win-btn" title="Minimize" onclick="minimize()">_</button>
         <button class="win-btn" title="Maximize">&#9633;</button>
-        <button class="win-btn" title="Close">&#215;</button>
+        <button class="win-btn" title="Close" onclick="shutdown()">&#215;</button>
       </div>
     </div>
 
@@ -477,6 +518,11 @@
 
   <div class="taskbar" id="taskbar">
     <button class="taskbar-btn" onclick="restore()">&#9635; ADI.EXE &mdash; [v1.0]</button>
+  </div>
+
+  <div class="shutdown-overlay" id="shutdown-overlay">
+    <div class="shutdown-message" id="shutdown-message">Windows is shutting down...</div>
+    <div class="shutdown-boot" id="shutdown-boot"></div>
   </div>
 
     <!-- ── Posts ─────────────────────────────────────────── -->
@@ -588,7 +634,7 @@
 
     const aboutText = [
       "Hey there, I'm Adi : )",
-      "I work as a senior data analyst at Moss",
+      "I work as a senior data analyst at Moss.",
       "I sometimes like to write in my spare time, some of which is documented here."
     ];
 
@@ -758,6 +804,70 @@
         win.style.transform  = "";
         win.style.opacity    = "";
       });
+    }
+
+    function shutdown() {
+      const win = document.querySelector(".window");
+      win.classList.add("minimizing");
+      setTimeout(() => {
+        win.classList.add("hidden");
+        win.classList.remove("minimizing");
+        runShutdownSequence();
+      }, 380);
+    }
+
+    function runShutdownSequence() {
+      const overlay = document.getElementById("shutdown-overlay");
+      const msg     = document.getElementById("shutdown-message");
+      const boot    = document.getElementById("shutdown-boot");
+      boot.textContent = "";
+      boot.classList.remove("visible");
+      msg.classList.remove("visible");
+      overlay.classList.remove("fading-out");
+      overlay.classList.add("active");
+
+      requestAnimationFrame(() => {
+        msg.classList.add("visible");
+      });
+
+      setTimeout(() => {
+        msg.classList.remove("visible");
+      }, 2500);
+
+      setTimeout(() => {
+        runBootSequence(boot, () => {
+          setTimeout(() => {
+            overlay.classList.add("fading-out");
+            setTimeout(() => {
+              overlay.classList.remove("active");
+              overlay.classList.remove("fading-out");
+              boot.classList.remove("visible");
+              boot.textContent = "";
+              restore();
+            }, 420);
+          }, 700);
+        });
+      }, 2500 + 800 + 300);
+    }
+
+    function runBootSequence(boot, done) {
+      const lines = [
+        "ADIRAVIRAJ BIOS v2.1",
+        "Copyright (C) 2025",
+        "",
+        "Memory check: 640K OK",
+        "Loading ADI.EXE...",
+        "",
+        "Starting Windows..."
+      ];
+      boot.classList.add("visible");
+      let i = 0;
+      (function next() {
+        if (i >= lines.length) { done(); return; }
+        boot.textContent += lines[i] + "\n";
+        i++;
+        setTimeout(next, 340);
+      })();
     }
   </script>
 
